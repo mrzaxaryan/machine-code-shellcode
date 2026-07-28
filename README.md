@@ -1,5 +1,10 @@
 # Article
 
-Technical reference notes.
+Technical reference notes. Start with the [intro](intro.md), or jump to any part:
 
-- **[Machine Code, Shellcode, and Executable Formats (EXE / ELF / APK / IPA)](machine-code-shellcode-formats.md)** — how source becomes machine code (compile + link), what makes shellcode position-independent, and how EXE, ELF, APK, and IPA differ as wrappers around native code.
+- **[Introduction](intro.md)** — the layers mental model and a reading order for the series.
+- **[Machine code](machine-code.md)** — how source becomes machine code (compile + link), static vs dynamic, object vs executable.
+- **[Shellcode](shellcode.md)** — machine code packaged for injection: position-independent, null-free, self-sufficient.
+- **[Executable & package formats](executable-formats.md)** — EXE / ELF / APK / IPA as wrappers around native code.
+- **[Position-independent code](position-independent-code.md)** — what PIC really means, and why whole-program PIC is hard.
+- **[The Position-Independent Agent](position-independent-agent.md)** — a real project that compiles a whole app into pure PIC shellcode.
