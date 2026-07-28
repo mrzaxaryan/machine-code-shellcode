@@ -5,6 +5,8 @@
 ### What it is
 **Shellcode** is a compact blob of machine code meant to be **injected into a target process and executed there** — not loaded by an OS as a normal file. Classically it was the payload that gave you a shell (hence the name); today it's any small native payload (reverse shell, meterpreter stager, egg hunter, etc.).
 
+> **Analogy — a note thrown over a wall.** A normal program is delivered by a moving crew (the OS loader) that unpacks crates, puts every item in its assigned spot, and switches on the lights. Shellcode is a note *thrown over the wall*: it lands wherever it lands and has to make sense and run on its own — no crew, no assigned address, no setup.
+
 ### What makes it shellcode, not just "machine code"
 Shellcode is machine code with three extra constraints:
 
@@ -35,6 +37,26 @@ Shellcode is usually **hand-assembled** (e.g. `nasm -f bin`) so it emits raw byt
 
 - **Compile from C with freestanding flags** (`-nostdlib -ffreestanding -fno-pic` off, PIC on, `-O2`), then use a **custom linker script** to lay everything out contiguously, and finally `objcopy -O binary` to strip headers and dump the flat `.text` as raw bytes. That flat blob is your shellcode.
 - **Staged payloads**: a tiny **stage-0** loader (a few dozen bytes) does just enough — `mmap`/`VirtualAlloc` memory, mark it executable, then read or decode the larger **stage-1** payload and jump to it. This is the shellcode analog of "linking": the stage-0 stub binds the bigger payload into place at runtime.
+
+In practice, the C-to-shellcode path looks like:
+
+```
+$ gcc -nostdlib -ffreestanding -fPIC -O2 -c payload.c   # → payload.o
+$ ld -T linker.ld payload.o -o payload.elf              # custom contiguous layout
+$ objcopy -O binary payload.elf payload.bin             # strip headers → flat bytes
+```
+
+`payload.bin` is your shellcode — raw `.text`, no headers, no loader metadata. A staged payload then chains a tiny stage-0 around a bigger stage-1:
+
+```
+   target process
+        │
+        ▼
+   stage-0 (tiny):  mmap / mprotect RWX, pull in stage-1, jump to it
+        │
+        ▼
+   stage-1 (big):   the real payload — decoded and executed
+```
 
 The hard contrast: a normal executable *describes itself* to the OS (headers, sections, imports) and lets the OS place it; **shellcode places and describes nothing — it just runs where it lands.**
 

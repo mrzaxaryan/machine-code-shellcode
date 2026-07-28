@@ -9,6 +9,28 @@ Here is the crucial two-level distinction that makes the comparison click:
 
 EXE and ELF are level 1. APK and IPA are level 2 (they *contain* level-1 files inside).
 
+> **Analogy — meal vs. meal kit.** An executable format (EXE/ELF/Mach-O) is a *ready-to-eat meal* the OS's microwave (its loader) just heats and serves. A package format (APK/IPA) is a *meal-kit box* — a ZIP — containing ingredients (the native binary + bytecode), a recipe (the manifest/`Info.plist`), and a tamper-evident seal (the signature).
+
+The level-2 packages literally unzip to reveal level-1 files inside:
+
+```
+   APK (a ZIP archive)              IPA (a ZIP archive)
+   ├── classes.dex      (DEX)       ├── Payload/App.app/
+   ├── lib/<abi>/*.so   (ELF) ◀─    │   ├── App          (Mach-O) ◀─
+   ├── AndroidManifest.xml          │   ├── Frameworks/*.dylib (Mach-O)
+   ├── res/, assets/                │   └── Info.plist
+   └── META-INF/        (signature) └── _CodeSignature/   (signature)
+```
+
+Notice the native **ELF** `.so` living *inside* the APK, and the native **Mach-O** binary living *inside* the IPA — the package is just a wrapper around a level-1 executable.
+
+### In practice: peeking inside an APK
+```
+$ unzip -l app.apk                       # it's a ZIP, not an executable
+   ... classes.dex, lib/arm64-v8a/libnative.so, res/, AndroidManifest.xml ...
+$ file lib/arm64-v8a/libnative.so        # "ELF 64-bit LSB shared object, ARM aarch64"
+```
+
 ### EXE — Windows (Portable Executable, PE)
 - **OS:** Windows. The format is **PE/COFF**; `.exe` is a PE whose subsystem is a Windows app, while `.dll` is the same PE format flagged as a library.
 - **Contents:** DOS/PE headers, sections (`.text` code, `.data`, `.rdata`, `.rsrc` resources…), an **Import Address Table (IAT)** for DLL dependencies, an **export table**, and optional resources/manifests.

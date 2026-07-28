@@ -8,4 +8,22 @@
 - **Self-contained.** Every syscall (Windows NT Native API with **PEB-walking** module resolution and indirect syscalls; Linux/BSD inline-asm syscalls across 7 architectures) and every crypto/protocol primitive (SHA-2, ChaCha20-Poly1305, ECC P-256, TLS 1.3) is built from scratch — exactly the "reach the kernel directly, don't assume libc is set up" constraint.
 - **The full pipeline in one project.** C++23 source → LLVM compile + PIC transform → link → flat shellcode. It is the compile → assemble → link chain from [machine code](machine-code.md), except the final step deliberately emits injectable bytes instead of an OS-loadable file.
 
-That is "describes nothing, runs where it lands" made real. It also shows the **static-vs-dynamic** choice from [machine code](machine-code.md) collapsing: with no libc to bind against, there is nothing left for a dynamic linker (`ld.so`, the PE loader) to resolve. And the project's Python/PowerShell **shellcode loaders** — the stubs that map the blob executable and jump to it — are the "stage-0 binds the payload" staged-payload pattern from [shellcode](shellcode.md) in concrete form.
+> **Analogy — an app folded into origami.** Each transform (data → stack stores, floats → integer bitcasts, pointers → PC-relative) is a fold that removes a dependence on being placed "just so." Unfolded, it would be a normal app; folded, it's a single flat blob that runs wherever it lands.
+
+### What the output actually is
+A single, header-less `.text` blob — tens of KB, no ELF/PE/Mach-O structure at all. A tiny loader is all it takes to wake it up:
+
+```
+   payload.bin   (flat PIC shellcode — no headers, no sections)
+        │
+        │  loader (Python / PowerShell stub):
+        │    1. VirtualAlloc / mmap     → reserve RWX memory
+        │    2. memcpy payload.bin in
+        │    3. jump to its first byte
+        ▼
+   running as a thread inside the host process
+```
+
+That is "describes nothing, runs where it lands" made real. It also shows the **static-vs-dynamic** choice from [machine code](machine-code.md) collapsing: with no libc to bind against, there is nothing left for a dynamic linker (`ld.so`, the PE loader) to resolve. And the project's Python/PowerShell **shellcode loaders** — the stubs above — are the "stage-0 binds the payload" staged-payload pattern from [shellcode](shellcode.md) in concrete form.
+
+> **Why it matters.** It's a reference for *how far* you can push "compile a whole program to freestanding, position-independent bytes" — and a concrete, end-to-end example of every concept in this series: compile → link, static linking taken to its limit, PIC, and shellcode packaging, all in one codebase.
