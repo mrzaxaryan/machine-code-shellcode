@@ -1,4 +1,4 @@
-# Appendix — Running Shellcode Without RWX Memory (NoRWX)
+# Appendix C — Running Shellcode Without RWX Memory (NoRWX)
 
 > **Appendix to:** [shellcode](shellcode.md) and the [Position-Independent Agent](position-independent-agent.md) · **Back to:** [intro](intro.md)
 
@@ -10,6 +10,8 @@ Recall the standard shellcode loader (from [shellcode](shellcode.md) and [PIA](p
    2. memcpy the shellcode in
    3. jump to it
 ```
+
+(Worked examples of the standard loader — including the more polished **RW → RX** variant — are in [Appendix A](appendix-powershell-injector.md) and [Appendix B](appendix-python-injector.md). NoRWX is what you get when you refuse the executable page *entirely*.)
 
 That first step is the tell. Modern systems enforce **W^X** ("write XOR execute") and **DEP/NX** — a page is writable *or* executable, never both, and data pages can't be executed at all. Defenders (EDR/AV) lean on exactly this: an allocation of **RWX** memory, or even RW-then-flipped-to-RX, is a loud "someone is about to run injected code" signal. So the real question becomes:
 

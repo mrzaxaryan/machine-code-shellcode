@@ -26,6 +26,6 @@ A single, header-less `.text` blob — tens of KB, no ELF/PE/Mach-O structure at
 
 That is "describes nothing, runs where it lands" made real. It also shows the **static-vs-dynamic** choice from [machine code](machine-code.md) collapsing: with no libc to bind against, there is nothing left for a dynamic linker (`ld.so`, the PE loader) to resolve. And the project's Python/PowerShell **shellcode loaders** — the stubs above — are the "stage-0 binds the payload" staged-payload pattern from [shellcode](shellcode.md) in concrete form.
 
-> **No RWX?** That loader allocates executable memory (`RWX`). The [NoRWX appendix](appendix-norwx.md) is the stealthy inverse — running the same blob from non-executable memory by emulating it on CPU faults.
+> **How is the blob actually loaded?** A small loader allocates executable memory and runs it — [Appendix A (PowerShell)](appendix-powershell-injector.md) and [Appendix B (Python)](appendix-python-injector.md) implement that with W^X discipline (`RW → RX`). [Appendix C — NoRWX](appendix-norwx.md) is the stealthy inverse — no executable allocation at all, run via emulation on CPU faults.
 
 > **Why it matters.** It's a reference for *how far* you can push "compile a whole program to freestanding, position-independent bytes" — and a concrete, end-to-end example of every concept in this series: compile → link, static linking taken to its limit, PIC, and shellcode packaging, all in one codebase.

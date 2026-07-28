@@ -35,7 +35,9 @@ Each article links back here and to the next, so jump in anywhere.
 
 ## Appendix
 
-- **[Appendix: Running shellcode without RWX memory (NoRWX)](appendix-norwx.md)** — how to execute the *same* position-independent shellcode from non-executable memory, bypassing the RWX-allocation pattern that defenders watch for.
+- **[Appendix A — PowerShell shellcode injector](appendix-powershell-injector.md)** — the standard W^X shellcode loader (`RW → RX`), in-process, in pure PowerShell.
+- **[Appendix B — Python shellcode injector](appendix-python-injector.md)** — the same loader cross-platform: remote-process injection on Windows, `mmap`/`mprotect` on POSIX.
+- **[Appendix C — NoRWX](appendix-norwx.md)** — run shellcode from non-executable memory via fault-driven emulation; no executable allocation at all.
 
 ## Glossary
 

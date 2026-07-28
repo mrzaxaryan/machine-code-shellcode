@@ -9,4 +9,6 @@ Technical reference notes. Start with the [intro](intro.md), or jump to any part
 - **[Shellcode](shellcode.md)** — machine code packaged for injection: position-independent, null-free, self-sufficient.
 - **[Position-independent code](position-independent-code.md)** — what PIC really means, and why whole-program PIC is hard.
 - **[The Position-Independent Agent](position-independent-agent.md)** — a real project that compiles a whole app into pure PIC shellcode.
-- **[Appendix — NoRWX](appendix-norwx.md)** — running shellcode without RWX memory, via fault-driven emulation.
+- **[Appendix A — PowerShell injector](appendix-powershell-injector.md)** — standard W^X shellcode loader in pure PowerShell.
+- **[Appendix B — Python injector](appendix-python-injector.md)** — cross-platform shellcode loader (remote-inject on Windows, `mmap` on POSIX).
+- **[Appendix C — NoRWX](appendix-norwx.md)** — running shellcode without RWX memory, via fault-driven emulation.
