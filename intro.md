@@ -41,6 +41,7 @@ Quick reference for terms that recur across the series.
 - **ABI / calling convention** — the rules for passing arguments, using registers and the stack, and returning values.
 - **Object file** (`.o` / `.obj`) — compiled-but-not-linked machine code; addresses are still relocatable placeholders.
 - **Relocation** — a "patch this address in later" note the linker uses to finalize cross-references.
+- **CRT / libc** — the C runtime + standard library the linker silently adds: startup code that runs before `main` (sets up stack/heap/stdio, runs constructors), plus functions like `printf`/`malloc`. Freestanding code (`-nostdlib`) does without it.
 - **PLT / GOT** — ELF's tables for resolving shared-library calls lazily, at runtime.
 - **IAT** (Import Address Table) — PE/EXE's equivalent: the slots where imported DLL function addresses get filled in.
 - **PIC** (Position-Independent Code) — code that runs correctly no matter where in memory it is placed.

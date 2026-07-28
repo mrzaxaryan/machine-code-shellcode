@@ -51,6 +51,30 @@ $ ./hello                 # Hello, world!
 
 So "compiled code" = object-file machine code with unresolved addresses; "linked code" = the final executable with everything resolved into a runnable whole.
 
+### The C runtime (CRT)
+A runnable executable is **not just your code**. When you compile a normal C/C++ program, the linker also silently pulls in the **C runtime (CRT)** — the support layer that prepares the process *before* `main()` ever runs:
+
+- **Startup code** — the OS loader jumps to `_start` (Linux, via glibc's `crt1.o`) or `mainCRTStartup` (Windows), *not* to `main`. It sets up the stack, builds `argc`/`argv`, initializes the heap and stdio, runs global / C++ constructors, and only then calls `main`.
+- **libc** — the standard library (`printf`, `malloc`, `memcpy`, `pthread_*`…), usually shipped with — and initialized by — the CRT.
+- **Shutdown** — after `main` returns, the CRT runs `exit`: flushes stdio, calls `atexit` / destructor handlers, then asks the kernel to tear the process down.
+
+```
+   OS loader maps the executable + libraries
+        │
+        ▼
+   _start / mainCRTStartup   ◀── CRT entry point (this is NOT main)
+        │  set up stack, heap, stdio; run global ctors; build argv
+        ▼
+   main()                    ◀── your code finally runs
+        │  return
+        ▼
+   exit:  flush stdio → run atexit/dtors → kernel exit
+```
+
+So linking does more than resolve *your* symbols — it stitches in this whole CRT + libc layer. That's why a tiny `int main(){}` binary is still kilobytes, and why a freshly linked program "just works" with a functioning `printf` and heap.
+
+> **Freestanding: the CRT is optional.** With `-ffreestanding -nostdlib` you opt out entirely — no startup, no libc, no `main` wrapper. Your code must supply its own entry point and reach the kernel through raw syscalls. That is exactly the regime **[shellcode](shellcode.md)** and the **[Position-Independent Agent](position-independent-agent.md)** live in: dropping the CRT is what lets them be tiny, self-contained, and free of any fixed-address dependency.
+
 > **Why it matters.** Every "native" program — whether written in C, Rust, Go, or JIT-compiled out of Java or JavaScript — reduces to this same compiled-then-linked machine code. The formats and wrappers in the rest of the series are just different ways of *packaging* this one payload.
 
 ---

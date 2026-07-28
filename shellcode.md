@@ -35,7 +35,7 @@ Same result (`exit(0)`), but every byte is non-zero and it has no absolute addre
 ### "Linked" shellcode
 Shellcode is usually **hand-assembled** (e.g. `nasm -f bin`) so it emits raw bytes directly — no object headers, no linker. But you *can* also:
 
-- **Compile from C with freestanding flags** (`-nostdlib -ffreestanding -fno-pic` off, PIC on, `-O2`), then use a **custom linker script** to lay everything out contiguously, and finally `objcopy -O binary` to strip headers and dump the flat `.text` as raw bytes. That flat blob is your shellcode.
+- **Compile from C with freestanding flags** (`-nostdlib -ffreestanding -fno-pic` off, PIC on, `-O2`) — opting out of the [C runtime](machine-code.md) entirely — then use a **custom linker script** to lay everything out contiguously, and finally `objcopy -O binary` to strip headers and dump the flat `.text` as raw bytes. That flat blob is your shellcode.
 - **Staged payloads**: a tiny **stage-0** loader (a few dozen bytes) does just enough — `mmap`/`VirtualAlloc` memory, mark it executable, then read or decode the larger **stage-1** payload and jump to it. This is the shellcode analog of "linking": the stage-0 stub binds the bigger payload into place at runtime.
 
 In practice, the C-to-shellcode path looks like:
