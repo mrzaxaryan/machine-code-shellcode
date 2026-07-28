@@ -25,10 +25,11 @@ The single mental model to keep in mind:
 ## Read in order
 
 1. **[Machine code](machine-code.md)** — the raw instructions a CPU executes, and how source code becomes them: compile + assemble + link, static vs dynamic linking, object file vs executable.
-2. **[Executable & package formats](executable-formats.md)** — how machine code gets wrapped so an OS can load and run it: **EXE**, **ELF**, **APK**, **IPA**.
-3. **[Shellcode](shellcode.md)** — the *same* machine code, repackaged for **injection** instead of an OS loader: position-independent, null-free, tiny, self-sufficient.
-4. **[Position-independent code](position-independent-code.md)** — a deep dive on **PIC**, shellcode's defining constraint, and why making a *whole program* position-independent is hard.
-5. **[The Position-Independent Agent](position-independent-agent.md)** — a real C++23 project that compiles an entire app into pure PIC shellcode, as a worked example of everything above.
+2. **[The operating system](operating-system.md)** — what actually *runs* your code: processes, virtual memory, page permissions, and the syscalls everything else leans on.
+3. **[Executable & package formats](executable-formats.md)** — how machine code gets wrapped so an OS can load and run it: **EXE**, **ELF**, **APK**, **IPA**.
+4. **[Shellcode](shellcode.md)** — the *same* machine code, repackaged for **injection** instead of an OS loader: position-independent, null-free, tiny, self-sufficient.
+5. **[Position-independent code](position-independent-code.md)** — a deep dive on **PIC**, shellcode's defining constraint, and why making a *whole program* position-independent is hard.
+6. **[The Position-Independent Agent](position-independent-agent.md)** — a real C++23 project that compiles an entire app into pure PIC shellcode, as a worked example of everything above.
 
 Each article links back here and to the next, so jump in anywhere.
 
@@ -43,14 +44,17 @@ Quick reference for terms that recur across the series.
 - **Opcode / operand** — an instruction's "verb" and its "arguments" in machine code (e.g. `b8 3c` = *move into `al`*, the value `3c`).
 - **ISA** (Instruction Set Architecture) — the instruction vocabulary a CPU family understands: x86-64, ARM64, RISC-V, …
 - **ABI / calling convention** — the rules for passing arguments, using registers and the stack, and returning values.
+- **Process** — a running program: a private virtual address space plus one or more threads executing its machine code.
 - **Object file** (`.o` / `.obj`) — compiled-but-not-linked machine code; addresses are still relocatable placeholders.
 - **Relocation** — a "patch this address in later" note the linker uses to finalize cross-references.
 - **CRT / libc** — the C runtime + standard library the linker silently adds: startup code that runs before `main` (sets up stack/heap/stdio, runs constructors), plus functions like `printf`/`malloc`. Freestanding code (`-nostdlib`) does without it.
 - **PLT / GOT** — ELF's tables for resolving shared-library calls lazily, at runtime.
 - **IAT** (Import Address Table) — PE/EXE's equivalent: the slots where imported DLL function addresses get filled in.
 - **PIC** (Position-Independent Code) — code that runs correctly no matter where in memory it is placed.
+- **Virtual memory / page** — the private address space the OS gives each process, carved into fixed-size (e.g. 4 KB) pages, each tagged with R/W/X permissions.
 - **DEP / NX (W^X)** — hardware memory protection: a page is writable *or* executable, not both, and data pages can't be executed. The basis for `RWX`-allocation detection.
 - **Mach-O** — the macOS / iOS native executable format (the binary living *inside* an IPA).
 - **DEX / ART** — Android's bytecode format and its runtime (both living *inside* an APK).
 - **Loader / dynamic linker** — OS code that maps an executable into memory and resolves its dependencies (`ld.so` on Linux, the Windows loader, `dyld` on Apple).
+- **Syscall** — the numbered, controlled request a user-mode program makes to ask the kernel to do something it can't on its own (touch hardware, allocate memory, read a file).
 - **VEH** (Vectored Exception Handler) — a Windows callback fired on CPU exceptions (e.g. an access violation) independent of any stack frame; how [NoRWX](appendix-norwx.md) intercepts faults to emulate shellcode.

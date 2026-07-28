@@ -1,6 +1,6 @@
 # Machine Code
 
-> **Series:** [intro](intro.md) ← **machine code** → [executable formats](executable-formats.md)
+> **Series:** [intro](intro.md) ← **machine code** → [operating system](operating-system.md)
 
 ### What it is
 Machine code is the binary the CPU executes directly — a sequence of **opcodes** and **operands** (`b8 3c 00 00 00` = "put 60 in `eax`"). It is:
@@ -79,4 +79,4 @@ So linking does more than resolve *your* symbols — it stitches in this whole C
 
 ---
 
-▶ **Next:** How that machine code gets wrapped so an OS can load and run it — **[executable & package formats](executable-formats.md)** (EXE / ELF / APK / IPA).
+▶ **Next:** What actually *runs* that machine code — **[the operating system](operating-system.md)**: processes, memory protection, and the syscalls everything else in this series leans on.

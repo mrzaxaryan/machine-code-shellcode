@@ -1,6 +1,6 @@
 # Executable & Package Formats: EXE, ELF, APK, IPA
 
-> **Series:** [machine code](machine-code.md) ← **formats** → [shellcode](shellcode.md)
+> **Series:** [operating system](operating-system.md) ← **formats** → [shellcode](shellcode.md)
 
 Here is the crucial two-level distinction that makes the comparison click:
 
