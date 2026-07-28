@@ -58,6 +58,8 @@ $ objcopy -O binary payload.elf payload.bin             # strip headers → flat
    stage-1 (big):   the real payload — decoded and executed
 ```
 
+> **Running shellcode without RWX memory?** The loaders above allocate executable (RWX/RX) pages — which is exactly what defenders watch for. The [NoRWX appendix](appendix-norwx.md) shows how to run the *same* shellcode from non-executable memory, via fault-driven emulation.
+
 The hard contrast: a normal executable *describes itself* to the OS (headers, sections, imports) and lets the OS place it; **shellcode places and describes nothing — it just runs where it lands.**
 
 ---

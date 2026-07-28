@@ -32,6 +32,10 @@ The single mental model to keep in mind:
 
 Each article links back here and to the next, so jump in anywhere.
 
+## Appendix
+
+- **[Appendix: Running shellcode without RWX memory (NoRWX)](appendix-norwx.md)** — how to execute the *same* position-independent shellcode from non-executable memory, bypassing the RWX-allocation pattern that defenders watch for.
+
 ## Glossary
 
 Quick reference for terms that recur across the series.
@@ -45,6 +49,8 @@ Quick reference for terms that recur across the series.
 - **PLT / GOT** — ELF's tables for resolving shared-library calls lazily, at runtime.
 - **IAT** (Import Address Table) — PE/EXE's equivalent: the slots where imported DLL function addresses get filled in.
 - **PIC** (Position-Independent Code) — code that runs correctly no matter where in memory it is placed.
+- **DEP / NX (W^X)** — hardware memory protection: a page is writable *or* executable, not both, and data pages can't be executed. The basis for `RWX`-allocation detection.
 - **Mach-O** — the macOS / iOS native executable format (the binary living *inside* an IPA).
 - **DEX / ART** — Android's bytecode format and its runtime (both living *inside* an APK).
 - **Loader / dynamic linker** — OS code that maps an executable into memory and resolves its dependencies (`ld.so` on Linux, the Windows loader, `dyld` on Apple).
+- **VEH** (Vectored Exception Handler) — a Windows callback fired on CPU exceptions (e.g. an access violation) independent of any stack frame; how [NoRWX](appendix-norwx.md) intercepts faults to emulate shellcode.
