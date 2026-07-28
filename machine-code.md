@@ -1,6 +1,6 @@
 # Machine Code
 
-> **Series:** [intro](intro.md) ← **machine code** → [shellcode](shellcode.md)
+> **Series:** [intro](intro.md) ← **machine code** → [executable formats](executable-formats.md)
 
 ### What it is
 Machine code is the binary the CPU executes directly — a sequence of **opcodes** and **operands** (`b8 3c 00 00 00` = "put 60 in `eax`"). It is:
@@ -37,4 +37,4 @@ So "compiled code" = object-file machine code with unresolved addresses; "linked
 
 ---
 
-▶ **Next:** The same machine code can be packaged not for an OS loader but for *injection* — that's **[shellcode](shellcode.md)**.
+▶ **Next:** How that machine code gets wrapped so an OS can load and run it — **[executable & package formats](executable-formats.md)** (EXE / ELF / APK / IPA).

@@ -9,8 +9,8 @@ The single mental model to keep in mind:
 ## Read in order
 
 1. **[Machine code](machine-code.md)** — the raw instructions a CPU executes, and how source code becomes them: compile + assemble + link, static vs dynamic linking, object file vs executable.
-2. **[Shellcode](shellcode.md)** — the *same* machine code, repackaged for **injection** instead of an OS loader: position-independent, null-free, tiny, self-sufficient.
-3. **[Executable & package formats](executable-formats.md)** — how machine code gets wrapped so an OS can load and run it: **EXE**, **ELF**, **APK**, **IPA**.
+2. **[Executable & package formats](executable-formats.md)** — how machine code gets wrapped so an OS can load and run it: **EXE**, **ELF**, **APK**, **IPA**.
+3. **[Shellcode](shellcode.md)** — the *same* machine code, repackaged for **injection** instead of an OS loader: position-independent, null-free, tiny, self-sufficient.
 4. **[Position-independent code](position-independent-code.md)** — a deep dive on **PIC**, shellcode's defining constraint, and why making a *whole program* position-independent is hard.
 5. **[The Position-Independent Agent](position-independent-agent.md)** — a real C++23 project that compiles an entire app into pure PIC shellcode, as a worked example of everything above.
 

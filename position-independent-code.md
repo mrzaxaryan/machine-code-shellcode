@@ -1,6 +1,6 @@
 # Position-Independent Code (PIC)
 
-> **Series:** [executable formats](executable-formats.md) ← **PIC** → [the Position-Independent Agent](position-independent-agent.md)
+> **Series:** [shellcode](shellcode.md) ← **PIC** → [the Position-Independent Agent](position-independent-agent.md)
 > **Builds on:** [shellcode](shellcode.md) and [machine code](machine-code.md).
 
 Shellcode's defining constraint is that it must run *wherever it lands* — it is **position-independent code (PIC)**. This article slows down on that one idea: what "runs wherever it lands" actually requires of the bytes, and what it takes to make a *whole program* satisfy it.

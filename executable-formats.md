@@ -1,6 +1,6 @@
 # Executable & Package Formats: EXE, ELF, APK, IPA
 
-> **Series:** [shellcode](shellcode.md) ← **formats** → [position-independent code](position-independent-code.md)
+> **Series:** [machine code](machine-code.md) ← **formats** → [shellcode](shellcode.md)
 
 Here is the crucial two-level distinction that makes the comparison click:
 
@@ -59,12 +59,4 @@ EXE and ELF are level 1. APK and IPA are level 2 (they *contain* level-1 files i
 
 ---
 
-## Putting it together
-- **Machine code** is the universal payload — architecture-specific bytes the CPU runs. *Compiling* turns source into relocatable object code; *linking* resolves it into a runnable executable.
-- **Shellcode** is the *same* machine code, but repackaged for injection: position-independent, null-free, tiny, and self-sufficient.
-- **EXE / ELF / Mach-O** are the *native* containers the OS loader understands — headers + sections around machine code, with dynamic-linking machinery.
-- **APK / IPA** are a layer *above* that — ZIP packages that bundle a native executable (ELF inside APK, Mach-O inside IPA) with bytecode, resources, and a signature for a mobile OS / app store.
-
-One payload, four increasingly "packaged" forms: **raw bytes → shellcode → OS executable → app store bundle.**
-
-▶ **Next:** The flip side — code that deliberately stays *un*-packaged so it can be injected anywhere: **[position-independent code](position-independent-code.md)**.
+▶ **Next:** The flip side — machine code packaged for *injection* rather than an OS loader: **[shellcode](shellcode.md)**.

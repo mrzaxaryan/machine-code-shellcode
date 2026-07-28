@@ -1,6 +1,6 @@
 # Shellcode
 
-> **Series:** [machine code](machine-code.md) ← **shellcode** → [executable formats](executable-formats.md)
+> **Series:** [executable formats](executable-formats.md) ← **shellcode** → [position-independent code](position-independent-code.md)
 
 ### What it is
 **Shellcode** is a compact blob of machine code meant to be **injected into a target process and executed there** — not loaded by an OS as a normal file. Classically it was the payload that gave you a shell (hence the name); today it's any small native payload (reverse shell, meterpreter stager, egg hunter, etc.).
@@ -40,4 +40,12 @@ The hard contrast: a normal executable *describes itself* to the OS (headers, se
 
 ---
 
-▶ **Next:** How machine code is *normally* packaged for an OS — **[executable & package formats](executable-formats.md)** (EXE / ELF / APK / IPA).
+## Putting it together
+- **Machine code** is the universal payload — architecture-specific bytes the CPU runs. *Compiling* turns source into relocatable object code; *linking* resolves it into a runnable executable.
+- **Shellcode** is the *same* machine code, but repackaged for injection: position-independent, null-free, tiny, and self-sufficient.
+- **EXE / ELF / Mach-O** are the *native* containers the OS loader understands — headers + sections around machine code, with dynamic-linking machinery.
+- **APK / IPA** are a layer *above* that — ZIP packages that bundle a native executable (ELF inside APK, Mach-O inside IPA) with bytecode, resources, and a signature for a mobile OS / app store.
+
+One payload, four increasingly "packaged" forms: **raw bytes → shellcode → OS executable → app store bundle.**
+
+▶ **Next:** Deep dive on shellcode's defining constraint — **[position-independent code](position-independent-code.md)**.
