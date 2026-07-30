@@ -37,11 +37,37 @@ $ file lib/arm64-v8a/libnative.so        # "ELF 64-bit LSB shared object, ARM aa
 - **Loader:** the Windows image loader maps sections, applies **ASLR** relocations, resolves the IAT against `kernel32.dll`/`ntdll.dll` and friends, then jumps to the entry point.
 - **Native machine code?** Yes — x86 / x64 / ARM64 bytes directly.
 
+#### File structure (top to bottom)
+```
+   ┌─ DOS header        (starts with "MZ"; e_lfanew → offset of the PE header)
+   ├─ DOS stub          (legacy 16-bit stub)
+   ├─ PE signature      ("PE" + 2 NUL bytes)
+   ├─ COFF file header  (machine, #sections, timestamp, characteristics)
+   ├─ Optional header   (PE32 / PE32+: ImageBase, AddressOfEntryPoint,
+   │                    SectionAlignment, SizeOfImage, + a data-directory table)
+   ├─ Section table     (per section: name, VirtualAddress, VirtualSize,
+   │                    raw offset/size, characteristics)
+   └─ Sections:  .text (code)  .rdata (read-only)  .data  .rsrc (resources)  .reloc
+```
+Key fields the loader cares about: `AddressOfEntryPoint` (the RVA it jumps to after setup), `ImageBase` (preferred load address — **ASLR** rebases from here), and the **data directories** — tables it walks for imports (→ **IAT**), exports, base relocations, and resources.
+
 ### ELF — Linux / Unix / BSD (Executable and Linkable Format)
 - **OS:** Linux, most Unix-likes, many embedded RTOSes. One format, many uses: **executables**, **shared objects (`.so`)**, **relocatable objects (`.o`)**, and even **core dumps**.
 - **Contents:** ELF header, **program headers** (what to map into memory at runtime) and **section headers** (used at link time), plus dynamic tables, the **PLT/GOT** for dynamic linking, and relocations.
 - **Loader:** the Linux kernel maps the program-header segments, then hands off to the **dynamic linker `ld.so`**, which resolves shared-library dependencies and patches the GOT/PLT before control reaches `main`.
 - **Native machine code?** Yes — directly.
+
+#### File structure (top to bottom)
+```
+   ┌─ ELF header (Elf64_Ehdr)
+   │     magic bytes 7F 45 4C 46 ("ELF"), class (32/64), data (endian),
+   │     type (ET_EXEC / ET_DYN), machine, e_entry, e_phoff, e_shoff, e_shstrndx
+   ├─ Program headers (Elf64_Phdr)   ◀── runtime: what to map
+   │     PT_LOAD (segments), PT_INTERP (the ld.so path), PT_DYNAMIC, PT_GNU_STACK (NX)
+   ├─ Sections: .text .rodata .data .bss .got .plt .dynamic .symtab .strtab
+   └─ Section headers (Elf64_Shdr)   ◀── link time: name, offset, size, type
+```
+ELF uniquely keeps **both** views: **program headers** describe the *segments* the loader maps (runtime), while **section headers** describe *sections* for linking and tooling (optional at runtime — stripped binaries drop them). `e_entry` is where execution begins.
 
 > Note on Apple: macOS / iOS use **Mach-O** (not PE or ELF). This matters because it is the *native* executable format **inside** an IPA — see below.
 
@@ -55,6 +81,22 @@ $ file lib/arm64-v8a/libnative.so        # "ELF 64-bit LSB shared object, ARM aa
   - `META-INF/` — the APK signature (v1) and metadata.
 - **Runtime:** **ART** (Android Runtime) runs the DEX bytecode; native code in the embedded `.so` ELF libraries runs via the standard Android ELF loader.
 - **Native machine code?** Indirectly — the app logic is DEX bytecode; only the bundled `.so` libraries are native ELF.
+
+#### File structure (it's a ZIP)
+```
+   APK = a ZIP archive
+   ┌─ Local file headers + data:
+   │     AndroidManifest.xml           (compiled binary XML — the "recipe")
+   │     classes.dex  [classes2.dex …] (DEX bytecode)
+   │     resources.arsc                (compiled resource table)
+   │     res/   assets/                (resources & raw assets)
+   │     lib/<abi>/lib*.so             (native libs — ELF ◀── a level-1 file inside)
+   │     META-INF/{MANIFEST.MF, *.SF, *.RSA}   (v1 signature, per-file)
+   └─ End Of Central Directory record          (the ZIP index; locates every entry)
+        (+ APK Signature Scheme v2/v3: a block appended between the last entry
+         and the EOCD — signs the *whole* archive, not individual files)
+```
+Because it's a standard ZIP, `unzip` reads it directly. The Android-specific parts are the compiled `AndroidManifest.xml`, the `.dex` files, `resources.arsc`, and the signature schemes.
 
 ### IPA — iOS application archive
 - **OS:** iOS. **Also a ZIP archive.**
