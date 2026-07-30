@@ -1,6 +1,6 @@
 # Shellcode
 
-> **Series:** [executable formats](executable-formats.md) ← **shellcode** → [position-independent code](position-independent-code.md)
+> **Series:** [executable formats](06-executable-formats.md) ← **shellcode** → [position-independent code](10-position-independent-code.md)
 
 ### What it is
 **Shellcode** is a compact blob of machine code meant to be **injected into a target process and executed there** — not loaded by an OS as a normal file. Classically it was the payload that gave you a shell (hence the name); today it's any small native payload (reverse shell, meterpreter stager, egg hunter, etc.).
@@ -10,7 +10,7 @@
 ### What makes it shellcode, not just "machine code"
 Shellcode is machine code with three extra constraints:
 
-1. **Position-Independent Code (PIC)** — it must run correctly *no matter where in memory it lands*, because the attacker controls where it's copied. It uses relative addressing instead of absolute addresses and does **not** rely on a loader to fix anything up (there is no loader). We unpack exactly *how* in **[Position-Independent Code](position-independent-code.md)**.
+1. **Position-Independent Code (PIC)** — it must run correctly *no matter where in memory it lands*, because the attacker controls where it's copied. It uses relative addressing instead of absolute addresses and does **not** rely on a loader to fix anything up (there is no loader). We unpack exactly *how* in **[Position-Independent Code](10-position-independent-code.md)**.
 2. **Bad-character free** — most injection paths copy bytes as a string (`strcpy`, `read` into a buffer), so a `\x00` (null) terminates the copy. Shellcode is hand-written/re-encoded to contain **no null bytes** (and often avoids `\n`, `\r`, spaces, etc., depending on the channel).
 3. **Small and self-contained** — it can't assume libc is set up; it reaches the kernel directly through **syscalls** (e.g. `syscall` on x86-64, `svc 0` on ARM).
 
@@ -35,7 +35,7 @@ Same result (`exit(0)`), but every byte is non-zero and it has no absolute addre
 ### "Linked" shellcode
 Shellcode is usually **hand-assembled** (e.g. `nasm -f bin`) so it emits raw bytes directly — no object headers, no linker. But you *can* also:
 
-- **Compile from C with freestanding flags** (`-nostdlib -ffreestanding -fno-pic` off, PIC on, `-O2`) — opting out of the [C runtime](machine-code.md) entirely — then use a **custom linker script** to lay everything out contiguously, and finally `objcopy -O binary` to strip headers and dump the flat `.text` as raw bytes. That flat blob is your shellcode.
+- **Compile from C with freestanding flags** (`-nostdlib -ffreestanding -fno-pic` off, PIC on, `-O2`) — opting out of the [C runtime](02-machine-code.md) entirely — then use a **custom linker script** to lay everything out contiguously, and finally `objcopy -O binary` to strip headers and dump the flat `.text` as raw bytes. That flat blob is your shellcode.
 - **Staged payloads**: a tiny **stage-0** loader (a few dozen bytes) does just enough — `mmap`/`VirtualAlloc` memory, mark it executable, then read or decode the larger **stage-1** payload and jump to it. This is the shellcode analog of "linking": the stage-0 stub binds the bigger payload into place at runtime.
 
 In practice, the C-to-shellcode path looks like:
@@ -72,4 +72,4 @@ The hard contrast: a normal executable *describes itself* to the OS (headers, se
 
 One payload, four increasingly "packaged" forms: **raw bytes → shellcode → OS executable → app store bundle.**
 
-▶ **Next:** Deep dive on shellcode's defining constraint — **[position-independent code](position-independent-code.md)**.
+▶ **Next:** Deep dive on shellcode's defining constraint — **[position-independent code](10-position-independent-code.md)**.

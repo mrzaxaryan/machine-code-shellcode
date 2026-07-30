@@ -1,6 +1,6 @@
 # Appendix B — Python Shellcode Injector
 
-> **Appendix to:** [shellcode](shellcode.md) and the [Position-Independent Agent](position-independent-agent.md) · **Back to:** [intro](intro.md)
+> **Appendix to:** [shellcode](09-shellcode.md) and the [Position-Independent Agent](19-position-independent-agent.md) · **Back to:** [intro](01-introduction.md)
 
 ## What it is
 [**nostdlib/PythonShellcodeInjector**](https://github.com/nostdlib/PythonShellcodeInjector) is a **cross-platform** shellcode loader in pure Python (stdlib only: `ctypes`, `mmap`, `urllib`; runs on Python 2.6+ and 3.x). It downloads position-independent code matching the host OS/arch and runs it — using **different techniques per platform**.
@@ -34,4 +34,4 @@ On Unix-likes it stays in-process and uses the POSIX equivalents:
 - **Remote fetch + auto-detect** — downloads `{platform}-{arch}.bin` from a URL template based on the detected OS/arch (including emulated cases like x86-64 Python on ARM64 Windows), with size and HTML-response validation.
 - **SSL verification disabled** by design.
 
-> **Why it matters.** It shows the *same* W^X loader idea expressed two ways — remote-process injection on Windows, in-process `mmap`/`mprotect` on POSIX — and is a natural runner for a cross-platform PIC blob like the [Position-Independent Agent](position-independent-agent.md). For the stealth extreme (run from non-executable memory, no executable allocation at all), see [Appendix C — NoRWX](appendix-norwx.md).
+> **Why it matters.** It shows the *same* W^X loader idea expressed two ways — remote-process injection on Windows, in-process `mmap`/`mprotect` on POSIX — and is a natural runner for a cross-platform PIC blob like the [Position-Independent Agent](19-position-independent-agent.md). For the stealth extreme (run from non-executable memory, no executable allocation at all), see [Appendix C — NoRWX](appendix-norwx.md).

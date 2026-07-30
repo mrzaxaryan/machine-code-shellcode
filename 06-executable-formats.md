@@ -1,6 +1,6 @@
 # Executable & Package Formats: EXE, ELF, APK, IPA
 
-> **Series:** [operating system](operating-system.md) ← **formats** → [shellcode](shellcode.md)
+> **Series:** [operating system](05-operating-system.md) ← **formats** → [shellcode](09-shellcode.md)
 
 Here is the crucial two-level distinction that makes the comparison click:
 
@@ -81,4 +81,4 @@ $ file lib/arm64-v8a/libnative.so        # "ELF 64-bit LSB shared object, ARM aa
 
 ---
 
-▶ **Next:** The flip side — machine code packaged for *injection* rather than an OS loader: **[shellcode](shellcode.md)**.
+▶ **Next:** The flip side — machine code packaged for *injection* rather than an OS loader: **[shellcode](09-shellcode.md)**.

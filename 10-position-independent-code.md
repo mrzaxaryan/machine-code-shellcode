@@ -1,7 +1,7 @@
 # Position-Independent Code (PIC)
 
-> **Series:** [shellcode](shellcode.md) ← **PIC** → [the Position-Independent Agent](position-independent-agent.md)
-> **Builds on:** [shellcode](shellcode.md) and [machine code](machine-code.md).
+> **Series:** [shellcode](09-shellcode.md) ← **PIC** → [the Position-Independent Agent](19-position-independent-agent.md)
+> **Builds on:** [shellcode](09-shellcode.md) and [machine code](02-machine-code.md).
 
 Shellcode's defining constraint is that it must run *wherever it lands* — it is **position-independent code (PIC)**. This article slows down on that one idea: what "runs wherever it lands" actually requires of the bytes, and what it takes to make a *whole program* satisfy it.
 
@@ -28,10 +28,10 @@ Three mechanics make PIC work:
 - **"GetPC" tricks** (e.g. `call next; next: pop rdi`) to learn an instruction's *own* address at runtime, when it needs to reference nearby data.
 - **No reliance on a loader** — it fixes up nothing, because there is no loader to do so.
 
-This is exactly why PIC is shellcode's first constraint (the three constraints in [shellcode](shellcode.md)): the attacker controls where the payload lands, so the bytes must be correct there unconditionally.
+This is exactly why PIC is shellcode's first constraint (the three constraints in [shellcode](09-shellcode.md)): the attacker controls where the payload lands, so the bytes must be correct there unconditionally.
 
 ## Why whole-program PIC is hard
-Hand-writing a 20-byte `exit(0)` stub as PIC (the example in [shellcode](shellcode.md)) is easy — you control every instruction. Making an **entire application** PIC is much harder, because ordinary high-level code is full of things that *want* absolute addresses:
+Hand-writing a 20-byte `exit(0)` stub as PIC (the example in [shellcode](09-shellcode.md)) is easy — you control every instruction. Making an **entire application** PIC is much harder, because ordinary high-level code is full of things that *want* absolute addresses:
 
 - **Global and static data** lives in `.data` / `.rodata` / `.bss` sections and is referenced by absolute address.
 - **String literals** are stored in `.rodata` and pointed to.
@@ -42,4 +42,4 @@ A linker normally finalizes all of these against a chosen base address. To get a
 
 ---
 
-▶ **Next:** See it done for real — **[the Position-Independent Agent](position-independent-agent.md)**, a whole app compiled to pure PIC shellcode.
+▶ **Next:** See it done for real — **[the Position-Independent Agent](19-position-independent-agent.md)**, a whole app compiled to pure PIC shellcode.

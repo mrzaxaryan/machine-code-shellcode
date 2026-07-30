@@ -1,6 +1,6 @@
 # The Operating System
 
-> **Series:** [machine code](machine-code.md) ← **operating system** → [executable formats](executable-formats.md)
+> **Series:** [calling conventions](04-calling-conventions.md) ← **operating system** → [executable formats](06-executable-formats.md)
 
 ### What it is
 Machine code is the payload — but on its own, a raw blob of bytes can't do anything useful. It can't print to a screen, open a file, or get memory without help. The **operating system (OS)** is the always-running layer between your code and the hardware that makes all of that possible: it runs your program, gives it memory, and mediates every access to the CPU, disk, and devices.
@@ -25,7 +25,7 @@ This is the moment everything in the series actually starts running. The OS **lo
    5. jump to the entry point   →   your code runs
 ```
 
-A "running program" is really just: an address space full of mapped pages plus at least one thread executing machine code inside it. (The format-specific details of steps 1–4 are exactly what [executable formats](executable-formats.md) covers.)
+A "running program" is really just: an address space full of mapped pages plus at least one thread executing machine code inside it. (The format-specific details of steps 1–4 are exactly what [executable formats](06-executable-formats.md) covers.)
 
 > **Analogy — a hotel.** The OS is the hotel: it gives each guest (process) their own room (address space) and a keycard that opens only their door. Guests can't wander into the boiler room (hardware) themselves — they call the front desk (a syscall) and ask.
 
@@ -45,13 +45,13 @@ CPUs run at privilege **levels** (rings). Your program runs in **user mode** (un
                 ◀─────────── result ------------┘
 ```
 
-This is why "reach the kernel directly through syscalls" (see [shellcode](shellcode.md) and [PIA](position-independent-agent.md)) isn't a stylistic choice — syscalls are the *only* legal way for user-mode code to get anything done.
+This is why "reach the kernel directly through syscalls" (see [shellcode](09-shellcode.md) and [PIA](19-position-independent-agent.md)) isn't a stylistic choice — syscalls are the *only* legal way for user-mode code to get anything done.
 
 ### Syscalls: the controlled gateway
-A **syscall** is a documented, numbered request: "kernel, please do operation N with these arguments." On x86-64 Linux that's the `syscall` instruction with a number in `rax` (e.g. `rax = 1` → `write`); on Windows you call into `ntdll.dll`, which issues the syscall for you. The kernel checks the arguments and permissions, does the work, and returns a result. Shellcode and freestanding programs ([PIA](position-independent-agent.md)) skip libc and issue these directly — libc's `printf`/`open` are just wrappers around the very same syscalls.
+A **syscall** is a documented, numbered request: "kernel, please do operation N with these arguments." On x86-64 Linux that's the `syscall` instruction with a number in `rax` (e.g. `rax = 1` → `write`); on Windows you call into `ntdll.dll`, which issues the syscall for you. The kernel checks the arguments and permissions, does the work, and returns a result. Shellcode and freestanding programs ([PIA](19-position-independent-agent.md)) skip libc and issue these directly — libc's `printf`/`open` are just wrappers around the very same syscalls.
 
 > **Why it matters.** Every wrapper in this series exists to be loaded and run by an OS, and every "reach the kernel directly" trick is just using the OS's own syscall gateway. The OS is the stage; machine code, shellcode, EXE/ELF/APK/IPA are the actors and costumes.
 
 ---
 
-▶ **Next:** How machine code gets packaged so this loader can run it — **[executable & package formats](executable-formats.md)** (EXE / ELF / APK / IPA).
+▶ **Next:** How machine code gets packaged so this loader can run it — **[executable & package formats](06-executable-formats.md)** (EXE / ELF / APK / IPA).

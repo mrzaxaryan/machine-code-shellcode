@@ -1,6 +1,6 @@
 # Machine Code, Shellcode & Executable Formats — an Introduction
 
-A running program is built in **layers**. This is a short tour of those layers — from the raw bytes a CPU executes, up to the app-store bundles on your phone, and then down a side path into **position-independent code**, the trick that lets machine code be *injected* and run anywhere.
+A running program is built in **layers**. This series walks those layers — from the raw bytes a CPU executes, up to the app-store bundles on your phone, and then deep into **position-independent code**, the trick that lets machine code be *injected* and run anywhere.
 
 The single mental model to keep in mind:
 
@@ -24,16 +24,28 @@ The single mental model to keep in mind:
 
 ## Read in order
 
-1. **[Machine code](machine-code.md)** — the raw instructions a CPU executes, and how source code becomes them: compile + assemble + link, static vs dynamic linking, object file vs executable.
-2. **[The operating system](operating-system.md)** — what actually *runs* your code: processes, virtual memory, page permissions, and the syscalls everything else leans on.
-3. **[Executable & package formats](executable-formats.md)** — how machine code gets wrapped so an OS can load and run it: **EXE**, **ELF**, **APK**, **IPA**.
-4. **[Shellcode](shellcode.md)** — the *same* machine code, repackaged for **injection** instead of an OS loader: position-independent, null-free, tiny, self-sufficient.
-5. **[Position-independent code](position-independent-code.md)** — a deep dive on **PIC**, shellcode's defining constraint, and why making a *whole program* position-independent is hard.
-6. **[The Position-Independent Agent](position-independent-agent.md)** — a real C++23 project that compiles an entire app into pure PIC shellcode, as a worked example of everything above.
+1. **[Machine code](02-machine-code.md)** — the raw instructions a CPU executes, and how source becomes them (compile + link).
+2. **[Assembly & instruction encoding](03-assembly-and-encoding.md)** — mnemonics, opcodes, ModR/M, and decoding bytes by hand.
+3. **[Calling conventions](04-calling-conventions.md)** — the ABI: where arguments go, return values, and stack discipline.
+4. **[The operating system](05-operating-system.md)** — what actually *runs* your code: processes, virtual memory, syscalls.
+5. **[Executable & package formats](06-executable-formats.md)** — how machine code is wrapped for an OS: EXE / ELF / APK / IPA.
+6. Linking & relocations — symbol resolution, static vs dynamic, PLT/GOT, IAT. *(forthcoming)*
+7. Executable memory — pages, R/W/X permissions, W^X / DEP-NX. *(forthcoming)*
+8. **[Shellcode](09-shellcode.md)** — machine code repackaged for injection: position-independent, null-free, self-sufficient.
+9. **[Position-independent code](10-position-independent-code.md)** — RIP-relative addressing, GetPC, and why no loader is needed.
+10. Data in position-independent code — globals, strings, and floats without fixed addresses. *(forthcoming)*
+11. Whole-program PIC — why making an *entire application* position-independent is hard. *(forthcoming)*
+12. Freestanding without a runtime — the CRT, `-nostdlib`, and your own entry point. *(forthcoming)*
+13. Hidden compiler dependencies — init arrays, stack canaries, unwind info, TLS. *(forthcoming)*
+14. Runtime API resolution — finding APIs without libc: PEB walking and export hashing. *(forthcoming)*
+15. Extracting flat binaries — linker scripts, `objcopy -O binary`, and the `pic-transform` pass. *(forthcoming)*
+16. Debugging position-independent code — driving gdb/WinDbg against raw, symbol-less blobs. *(forthcoming)*
+17. PIC across architectures — x86-64 RIP vs ARM `ADRP` vs RISC-V `auipc`. *(forthcoming)*
+18. **[The Position-Independent Agent](19-position-independent-agent.md)** — a real C++23 project that compiles an entire app into pure PIC shellcode.
 
-Each article links back here and to the next, so jump in anywhere.
+Each chapter links to the next; forthcoming ones are filled in across batches.
 
-## Appendix
+## Appendices
 
 - **[Appendix A — PowerShell shellcode injector](appendix-powershell-injector.md)** — the standard W^X shellcode loader (`RW → RX`), in-process, in pure PowerShell.
 - **[Appendix B — Python shellcode injector](appendix-python-injector.md)** — the same loader cross-platform: remote-process injection on Windows, `mmap`/`mprotect` on POSIX.

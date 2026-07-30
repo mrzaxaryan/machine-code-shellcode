@@ -1,6 +1,6 @@
 # Machine Code
 
-> **Series:** [intro](intro.md) ← **machine code** → [operating system](operating-system.md)
+> **Series:** [intro](01-introduction.md) ← **machine code** → [assembly](03-assembly-and-encoding.md)
 
 ### What it is
 Machine code is the binary the CPU executes directly — a sequence of **opcodes** and **operands** (`b8 3c 00 00 00` = "put 60 in `eax`"). It is:
@@ -73,10 +73,10 @@ A runnable executable is **not just your code**. When you compile a normal C/C++
 
 So linking does more than resolve *your* symbols — it stitches in this whole CRT + libc layer. That's why a tiny `int main(){}` binary is still kilobytes, and why a freshly linked program "just works" with a functioning `printf` and heap.
 
-> **Freestanding: the CRT is optional.** With `-ffreestanding -nostdlib` you opt out entirely — no startup, no libc, no `main` wrapper. Your code must supply its own entry point and reach the kernel through raw syscalls. That is exactly the regime **[shellcode](shellcode.md)** and the **[Position-Independent Agent](position-independent-agent.md)** live in: dropping the CRT is what lets them be tiny, self-contained, and free of any fixed-address dependency.
+> **Freestanding: the CRT is optional.** With `-ffreestanding -nostdlib` you opt out entirely — no startup, no libc, no `main` wrapper. Your code must supply its own entry point and reach the kernel through raw syscalls. That is exactly the regime **[shellcode](09-shellcode.md)** and the **[Position-Independent Agent](19-position-independent-agent.md)** live in: dropping the CRT is what lets them be tiny, self-contained, and free of any fixed-address dependency.
 
 > **Why it matters.** Every "native" program — whether written in C, Rust, Go, or JIT-compiled out of Java or JavaScript — reduces to this same compiled-then-linked machine code. The formats and wrappers in the rest of the series are just different ways of *packaging* this one payload.
 
 ---
 
-▶ **Next:** What actually *runs* that machine code — **[the operating system](operating-system.md)**: processes, memory protection, and the syscalls everything else in this series leans on.
+▶ **Next:** How those raw bytes are written and read — **[assembly & instruction encoding](03-assembly-and-encoding.md)**.

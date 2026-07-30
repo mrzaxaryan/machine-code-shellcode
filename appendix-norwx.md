@@ -1,9 +1,9 @@
 # Appendix C — Running Shellcode Without RWX Memory (NoRWX)
 
-> **Appendix to:** [shellcode](shellcode.md) and the [Position-Independent Agent](position-independent-agent.md) · **Back to:** [intro](intro.md)
+> **Appendix to:** [shellcode](09-shellcode.md) and the [Position-Independent Agent](19-position-independent-agent.md) · **Back to:** [intro](01-introduction.md)
 
 ## The problem: shellcode needs somewhere executable to run
-Recall the standard shellcode loader (from [shellcode](shellcode.md) and [PIA](position-independent-agent.md)):
+Recall the standard shellcode loader (from [shellcode](09-shellcode.md) and [PIA](19-position-independent-agent.md)):
 
 ```
    1. VirtualAlloc / mmap  → RWX memory      ◀── allocate executable space
@@ -43,7 +43,7 @@ So the shellcode bytes sit in *non-executable* memory and are **interpreted by a
 
 ## Why it matters
 - **No RWX, no RX.** NoRWX allocates nothing executable, defeating detectors that hunt for the classic `VirtualAlloc(RWX)` / RW→RX pattern.
-- **The shellcode is unchanged.** Because it is emulated, ordinary PIC shellcode (even a blob like the [Position-Independent Agent](position-independent-agent.md)'s) runs as-is — PIC is exactly what lets the emulator place it on the fly.
+- **The shellcode is unchanged.** Because it is emulated, ordinary PIC shellcode (even a blob like the [Position-Independent Agent](19-position-independent-agent.md)'s) runs as-is — PIC is exactly what lets the emulator place it on the fly.
 - **A counterpoint to the standard loader.** The PIA loader is *fast and simple* (`RWX → memcpy → jump`); NoRWX is *stealthy and slow* (emulate every instruction). Same payload, opposite tradeoff.
 
 It targets Windows x86-64 and i386 (a VEH plus a per-ISA instruction decoder/handler set), built with Clang/CMake/Ninja — another single-author reference for how much of the "rules" around native-code execution are really conventions you can route around.

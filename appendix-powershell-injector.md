@@ -1,6 +1,6 @@
 # Appendix A — PowerShell Shellcode Injector
 
-> **Appendix to:** [shellcode](shellcode.md) and the [Position-Independent Agent](position-independent-agent.md) · **Back to:** [intro](intro.md)
+> **Appendix to:** [shellcode](09-shellcode.md) and the [Position-Independent Agent](19-position-independent-agent.md) · **Back to:** [intro](01-introduction.md)
 
 ## What it is
 [**nostdlib/PowerShellShellcodeInjector**](https://github.com/nostdlib/PowerShellShellcodeInjector) is a Windows shellcode loader written in pure PowerShell (with inline C# P/Invoke — no external modules, no admin rights). It downloads position-independent code from GitHub Releases and runs it **inside the PowerShell process itself**, with proper **W^X** memory discipline.
@@ -25,4 +25,4 @@ Two things worth noting:
 ## Fetching the payload
 It auto-detects the CPU via `PROCESSOR_ARCHITECTURE` and pulls the matching asset — `windows-x86_64.bin`, `windows-i386.bin`, `windows-aarch64.bin`, or `windows-armv7a.bin` — then sanity-checks it (rejects too-small payloads and HTML "error page" responses). SSL verification is intentionally disabled, since it's fetching unsigned public blobs.
 
-> **Why it matters.** A clean, readable reference for the *standard* shellcode-loader pattern, and the practical runner for a payload like the [Position-Independent Agent](position-independent-agent.md), whose flat PIC blob is exactly what a loader like this is built to run. For the opposite philosophy (no executable allocation at all), see [Appendix C — NoRWX](appendix-norwx.md) and the cross-platform [Appendix B](appendix-python-injector.md).
+> **Why it matters.** A clean, readable reference for the *standard* shellcode-loader pattern, and the practical runner for a payload like the [Position-Independent Agent](19-position-independent-agent.md), whose flat PIC blob is exactly what a loader like this is built to run. For the opposite philosophy (no executable allocation at all), see [Appendix C — NoRWX](appendix-norwx.md) and the cross-platform [Appendix B](appendix-python-injector.md).
