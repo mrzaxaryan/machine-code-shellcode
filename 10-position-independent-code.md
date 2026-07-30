@@ -1,6 +1,6 @@
 # Position-Independent Code (PIC)
 
-> **Series:** [shellcode](09-shellcode.md) ← **PIC** → [the Position-Independent Agent](19-position-independent-agent.md)
+> **Series:** [shellcode](09-shellcode.md) ← **PIC** → [data in position-independent code](11-data-in-position-independent-code.md)
 > **Builds on:** [shellcode](09-shellcode.md) and [machine code](02-machine-code.md).
 
 Shellcode's defining constraint is that it must run *wherever it lands* — it is **position-independent code (PIC)**. This article slows down on that one idea: what "runs wherever it lands" actually requires of the bytes, and what it takes to make a *whole program* satisfy it.
@@ -30,16 +30,8 @@ Three mechanics make PIC work:
 
 This is exactly why PIC is shellcode's first constraint (the three constraints in [shellcode](09-shellcode.md)): the attacker controls where the payload lands, so the bytes must be correct there unconditionally.
 
-## Why whole-program PIC is hard
-Hand-writing a 20-byte `exit(0)` stub as PIC (the example in [shellcode](09-shellcode.md)) is easy — you control every instruction. Making an **entire application** PIC is much harder, because ordinary high-level code is full of things that *want* absolute addresses:
-
-- **Global and static data** lives in `.data` / `.rodata` / `.bss` sections and is referenced by absolute address.
-- **String literals** are stored in `.rodata` and pointed to.
-- **Floating-point constants** are loaded from memory.
-- **Function pointers** and vtables hold absolute code addresses.
-
-A linker normally finalizes all of these against a chosen base address. To get a flat, injectable PIC blob you have to **eliminate every one of them** — which is what the next article's project does, automatically.
+Why making an *entire program* PIC is hard — and how it's automated — is covered later in [whole-program PIC](12-whole-program-pic.md).
 
 ---
 
-▶ **Next:** See it done for real — **[the Position-Independent Agent](19-position-independent-agent.md)**, a whole app compiled to pure PIC shellcode.
+▶ **Next:** How PIC code references data without fixed addresses — **[data in position-independent code](11-data-in-position-independent-code.md)**.

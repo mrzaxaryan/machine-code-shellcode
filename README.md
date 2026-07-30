@@ -12,12 +12,12 @@ Start at **[01 — Introduction](01-introduction.md)** for the mental model, big
 4. [Calling conventions](04-calling-conventions.md)
 5. [The operating system](05-operating-system.md)
 6. [Executable & package formats](06-executable-formats.md)
-7. Linking & relocations *(forthcoming)*
-8. Executable memory *(forthcoming)*
+7. [Linking & relocations](07-linking-and-relocations.md)
+8. [Executable memory](08-executable-memory.md)
 9. [Shellcode](09-shellcode.md)
 10. [Position-independent code](10-position-independent-code.md)
-11. Data in position-independent code *(forthcoming)*
-12. Whole-program PIC *(forthcoming)*
+11. [Data in position-independent code](11-data-in-position-independent-code.md)
+12. [Whole-program PIC](12-whole-program-pic.md)
 13. Freestanding without a runtime *(forthcoming)*
 14. Hidden compiler dependencies *(forthcoming)*
 15. Runtime API resolution *(forthcoming)*

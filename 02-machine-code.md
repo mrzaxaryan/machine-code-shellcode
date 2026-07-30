@@ -37,19 +37,7 @@ $ ./hello                 # Hello, world!
 
 `hello.o` already holds real machine code, but it can't run — its calls to `puts`/`printf` are still unresolved placeholders. Only after the linker (`gcc … -o hello`) resolves them do you get a runnable program. That object-vs-executable gap *is* the whole "compiled vs linked" distinction.
 
-### Static vs dynamic linking
-- **Static linking** — the library code is *copied into* your binary. Big, self-contained, no runtime dependencies.
-- **Dynamic linking** — your binary keeps only *references* to shared libraries (`.so` / `.dll` / `.dylib`). A **dynamic linker/loader** (`ld.so`, Windows loader, `dyld`) resolves them at startup using tables of pointers: **PLT/GOT** (ELF), the **IAT** (PE), or stubs/lazy binds (Mach-O). Smaller binaries, shared in RAM, but depend on the right libs being present at runtime.
-
-### Object file vs executable (the key "compiled vs linked" distinction)
-| | Object file (`.o`/`.obj`) | Executable / shared lib |
-|---|---|---|
-| Has real machine code? | Yes | Yes |
-| Addresses final? | No — relocatable | Yes |
-| Can the OS run it directly? | No | Yes |
-| Created by | assembler | linker |
-
-So "compiled code" = object-file machine code with unresolved addresses; "linked code" = the final executable with everything resolved into a runnable whole.
+The linker's deeper mechanics — static vs dynamic linking, the object-vs-executable distinction, **relocations**, and the PLT/GOT and IAT — get a chapter of their own: **[linking & relocations](07-linking-and-relocations.md)**.
 
 ### The C runtime (CRT)
 A runnable executable is **not just your code**. When you compile a normal C/C++ program, the linker also silently pulls in the **C runtime (CRT)** — the support layer that prepares the process *before* `main()` ever runs:

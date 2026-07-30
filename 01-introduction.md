@@ -29,12 +29,12 @@ The single mental model to keep in mind:
 3. **[Calling conventions](04-calling-conventions.md)** — the ABI: where arguments go, return values, and stack discipline.
 4. **[The operating system](05-operating-system.md)** — what actually *runs* your code: processes, virtual memory, syscalls.
 5. **[Executable & package formats](06-executable-formats.md)** — how machine code is wrapped for an OS: EXE / ELF / APK / IPA.
-6. Linking & relocations — symbol resolution, static vs dynamic, PLT/GOT, IAT. *(forthcoming)*
-7. Executable memory — pages, R/W/X permissions, W^X / DEP-NX. *(forthcoming)*
+6. **[Linking & relocations](07-linking-and-relocations.md)** — symbol resolution, static vs dynamic, PLT/GOT, IAT.
+7. **[Executable memory](08-executable-memory.md)** — pages, R/W/X permissions, W^X / DEP-NX.
 8. **[Shellcode](09-shellcode.md)** — machine code repackaged for injection: position-independent, null-free, self-sufficient.
 9. **[Position-independent code](10-position-independent-code.md)** — RIP-relative addressing, GetPC, and why no loader is needed.
-10. Data in position-independent code — globals, strings, and floats without fixed addresses. *(forthcoming)*
-11. Whole-program PIC — why making an *entire application* position-independent is hard. *(forthcoming)*
+10. **[Data in position-independent code](11-data-in-position-independent-code.md)** — globals, strings, and floats without fixed addresses.
+11. **[Whole-program PIC](12-whole-program-pic.md)** — why making an *entire application* position-independent is hard.
 12. Freestanding without a runtime — the CRT, `-nostdlib`, and your own entry point. *(forthcoming)*
 13. Hidden compiler dependencies — init arrays, stack canaries, unwind info, TLS. *(forthcoming)*
 14. Runtime API resolution — finding APIs without libc: PEB walking and export hashing. *(forthcoming)*

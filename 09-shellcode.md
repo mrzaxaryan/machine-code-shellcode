@@ -1,6 +1,6 @@
 # Shellcode
 
-> **Series:** [executable formats](06-executable-formats.md) ← **shellcode** → [position-independent code](10-position-independent-code.md)
+> **Series:** [executable memory](08-executable-memory.md) ← **shellcode** → [position-independent code](10-position-independent-code.md)
 
 ### What it is
 **Shellcode** is a compact blob of machine code meant to be **injected into a target process and executed there** — not loaded by an OS as a normal file. Classically it was the payload that gave you a shell (hence the name); today it's any small native payload (reverse shell, meterpreter stager, egg hunter, etc.).

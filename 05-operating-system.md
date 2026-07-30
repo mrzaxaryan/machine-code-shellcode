@@ -29,11 +29,7 @@ A "running program" is really just: an address space full of mapped pages plus a
 
 > **Analogy — a hotel.** The OS is the hotel: it gives each guest (process) their own room (address space) and a keycard that opens only their door. Guests can't wander into the boiler room (hardware) themselves — they call the front desk (a syscall) and ask.
 
-### Memory & protection: pages and permissions
-The OS doesn't hand out raw RAM. It gives each process a **virtual address space** divided into fixed-size **pages** (typically 4 KB), and every page carries **permission bits**: read, write, execute. Two consequences that matter a lot for this series:
-
-- **Isolation** — process A can't read or write process B's memory; each sees only its own virtual world.
-- **W^X / DEP-NX** — the hardware (with the OS) refuses to *execute* code from a page that isn't marked executable. This is the exact protection the [NoRWX appendix](appendix-norwx.md) routes around, and the reason shellcode loaders must allocate executable (RWX/RX) pages.
+Pages, permissions (R/W/X), and the W^X / DEP-NX rule get a chapter of their own — **[executable memory](08-executable-memory.md)** — including how shellcode loaders actually obtain an executable page.
 
 ### User mode vs kernel mode
 CPUs run at privilege **levels** (rings). Your program runs in **user mode** (unprivileged); the OS kernel runs in **kernel mode** (full hardware access). A user-mode program literally *cannot* execute the privileged instructions that touch hardware or page tables — there's no opcode it can run to bypass that. The only door between them is the **syscall**.
